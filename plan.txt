@@ -1,0 +1,65 @@
+booking-worker/
+├── src/main/java/com/example/booking/worker/
+│   ├── consumer/
+│   │   └── BookingIntentConsumer.java
+│   │
+│   ├── service/
+│   │   ├── SeatLockService.java
+│   │   └── BookingService.java
+│   │
+│   ├── entity/
+│   │   ├── Event.java
+│   │   ├── Seat.java
+│   │   └── Booking.java
+│   │
+│   ├── repository/
+│   │   ├── EventRepository.java
+│   │   ├── SeatRepository.java
+│   │   └── BookingRepository.java
+│   │
+│   ├── scheduler/
+│   │   └── SeatUnlockScheduler.java
+│   │
+│   └── BookingWorkerApplication.java
+│
+├── src/main/resources/
+│   └── application.yml
+│
+└── pom.xml
+
+
+
+
+
+
+
+booking-API
+
+booking-worker/
+├── src/main/java/com/example/booking/worker/
+│   ├── consumer/
+│   │   └── BookingIntentConsumer.java
+│   │
+│   ├── service/
+│   │   ├── SeatLockService.java
+│   │   └── BookingService.java
+│   │
+│   ├── entity/
+│   │   ├── Event.java
+│   │   ├── Seat.java
+│   │   └── Booking.java
+│   │
+│   ├── repository/
+│   │   ├── EventRepository.java
+│   │   ├── SeatRepository.java
+│   │   └── BookingRepository.java
+│   │
+│   ├── scheduler/
+│   │   └── SeatUnlockScheduler.java
+│   │
+│   └── BookingWorkerApplication.java
+│
+├── src/main/resources/
+│   └── application.yml
+│
+└── pom.xml
