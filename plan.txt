@@ -78,3 +78,26 @@ docker run -d \
   -e KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0 \
   -e KAFKA_NUM_PARTITIONS=3 \
   apache/kafka:latest
+
+
+curl -X POST http://localhost:8080/api/bookings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventId": 1,
+    "userId": 101,
+    "seatIds": [1,2]
+  }'
+
+
+docker exec -it broker kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --delete \
+  --topic booking-intents
+
+
+docker exec -it broker kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --create \
+  --topic booking-intents \
+  --partitions 3 \
+  --replication-factor 1
