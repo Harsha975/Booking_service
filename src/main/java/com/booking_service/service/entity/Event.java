@@ -20,4 +20,10 @@ public class Event {
 
     @Column(name = "start_time", nullable = false)
     private LocalDateTime start_time;
+
+    @Column(name = "end_time" , nullable = false)
+    private  LocalDateTime end_time;
+
+    @Column(name = "city" , nullable = false)
+    private String city;
 }

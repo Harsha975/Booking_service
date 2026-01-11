@@ -33,36 +33,33 @@ booking-worker/
 
 
 
-booking-API
+    booking-api/
+    ├── src/main/java/com/example/booking/api/
+    │   ├── controller/
+    │   │   ├── EventController.java
+    │   │   ├── SeatController.java
+    │   │   └── BookingController.java
+    │   │
+    │   ├── dto/
+    │   │   ├── BookingRequest.java
+    │   │   ├── EventResponse.java
+    │   │   └── SeatResponse.java
+    │   │
+    │   ├── service/
+    │   │   ├── EventQueryService.java
+    │   │   ├── SeatQueryService.java
+    │   │   └── BookingIntentService.java
+    │   │
+    │   ├── kafka/
+    │   │   └── BookingIntentProducer.java
+    │   │
+    │   └── BookingApiApplication.java
+    │
+    ├── src/main/resources/
+    │   └── application.yml
+    │
+    └── pom.xml
 
-booking-worker/
-├── src/main/java/com/example/booking/worker/
-│   ├── consumer/
-│   │   └── BookingIntentConsumer.java
-│   │
-│   ├── service/
-│   │   ├── SeatLockService.java
-│   │   └── BookingService.java
-│   │
-│   ├── entity/
-│   │   ├── Event.java
-│   │   ├── Seat.java
-│   │   └── Booking.java
-│   │
-│   ├── repository/
-│   │   ├── EventRepository.java
-│   │   ├── SeatRepository.java
-│   │   └── BookingRepository.java
-│   │
-│   ├── scheduler/
-│   │   └── SeatUnlockScheduler.java
-│   │
-│   └── BookingWorkerApplication.java
-│
-├── src/main/resources/
-│   └── application.yml
-│
-└── pom.xml
 
 docker run -d \
   --name broker \

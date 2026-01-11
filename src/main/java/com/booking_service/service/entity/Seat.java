@@ -13,20 +13,17 @@ public class Seat {
     @Id
     @Column(name = "seat_id")
     private Long seatId;
-
     @Id
     @Column(name = "event_id")
     private Long eventId;
 
-    @Column(name = "user_id")
-    private Long iserId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private SeatStatus status;
 
-    @Column(name = "status" , nullable = false)
-    private String status;  //OPEN, LOCKED, BOOKED
-
-    @Column(name = "locked_at" , nullable = false)
+    @Column(name = "locked_at")
     private LocalDateTime lockedAt;
 
-    @Column(name = "locked_by" ,nullable = false)
+    @Column(name = "locked_by")
     private Long lockedBy;
 }
