@@ -89,15 +89,24 @@ curl -X POST http://localhost:8080/api/bookings \
   }'
 
 
-docker exec -it broker kafka-topics.sh \
+docker exec -it broker opt/kafka/bin/kafka-topics.sh \
   --bootstrap-server localhost:9092 \
   --delete \
   --topic booking-intents
 
 
-docker exec -it broker kafka-topics.sh \
+docker exec -it broker opt/kafka/bin/kafka-topics.sh \
   --bootstrap-server localhost:9092 \
   --create \
   --topic booking-intents \
   --partitions 3 \
   --replication-factor 1
+
+
+docker run -d --name postgres-db   -e POSTGRES_USER=postgres   -e POSTGRES_PASSWORD=postgres   -e POSTGRES_DB=bookingdb   -p 5432:5432   38d5c9d52203
+ -- steps to need to run the backend service.
+./mvnw clean package
+
+docker build -t harsham/backend-service:latest .
+
+docker compose up -d
