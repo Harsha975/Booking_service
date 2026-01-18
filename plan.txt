@@ -107,6 +107,14 @@ docker run -d --name postgres-db   -e POSTGRES_USER=postgres   -e POSTGRES_PASSW
  -- steps to need to run the backend service.
 ./mvnw clean package
 
-docker build -t harsham/backend-service:latest .
+docker build -t backend-service:latest .
 
 docker compose up -d
+
+
+stripe login
+stripe listen --forward-to localhost:8082/webhooks/stripe
+stripe.webhook.secret=whsec_XXXX
+
+5️⃣ Test event
+stripe trigger checkout.session.completed
