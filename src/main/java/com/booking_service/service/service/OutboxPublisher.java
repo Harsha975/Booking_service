@@ -1,8 +1,10 @@
 package com.booking_service.service.service;
 
 import com.booking_service.service.entity.OutboxEvent;
+import com.booking_service.service.entity.PaymentRequestedEvent;
 import com.booking_service.service.repository.OutboxRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -12,14 +14,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 public class OutboxPublisher {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, PaymentRequestedEvent> kafkaTemplate;
     private final OutboxRepository outboxRepository;
 
     public OutboxPublisher(
-            KafkaTemplate<String, String> kafkaTemplate,
+            KafkaTemplate<String, PaymentRequestedEvent> kafkaTemplate,
             OutboxRepository outboxRepository
     ) {
         this.kafkaTemplate = kafkaTemplate;
@@ -33,24 +36,30 @@ public class OutboxPublisher {
         List<OutboxEvent> events =
                 outboxRepository.findTop50ByPublishedFalseOrderByCreatedAt();
 
-        for (OutboxEvent event : events) {
+        for (OutboxEvent message : events) {
 
-            Message<String> message = MessageBuilder
-                    .withPayload(event.getPayload())
-                    .setHeader(KafkaHeaders.TOPIC, "payment-requested")
-                    .setHeader(KafkaHeaders.KEY, event.getAggregateId().toString())
-                    .setHeader("eventType", event.getEventType())
-                    .setHeader("aggregateType", event.getAggregateType())
-                    .setHeader("eventId", event.getId().toString())
-                    .build();
-
+//            Message<String> message = MessageBuilder
+//                    .withPayload(event.getPayload())
+//                    .setHeader(KafkaHeaders.TOPIC, "payment-requested")
+//                    .setHeader(KafkaHeaders.KEY, event.getBookingId().toString())
+//                    .setHeader("paymentStatus", event.getStatus())
+//                    .setHeader("eventId", event.getUserId().toString())
+//                    .build();
+            PaymentRequestedEvent event =
+                    new PaymentRequestedEvent(
+                            message.getBookingId(),
+                            message.getUserId(),
+                            message.getAmount(),
+                            message.getStatus()
+                    );
             try {
-                kafkaTemplate.send(message).get(); // 🔒 wait for broker ack
-                event.markPublished();             // ✅ only after success
+                kafkaTemplate.send(
+                        "payment-requested",
+                        String.valueOf(message.getBookingId()),
+                        event).get(); // 🔒 wait for broker ack
+                message.markPublished();             // ✅ only after success
             } catch (Exception ex) {
-                // ❌ do NOT mark published
-                // Kafka retry will happen next scheduler run
-                // optional: log + metrics
+                log.info(ex.getMessage(), ex);
                 break; // avoid hammering Kafka
             }
         }

@@ -16,7 +16,8 @@ public class BookingIntentConsumer {
 
     @KafkaListener(
             topics = "booking-intents",
-            groupId = "booking-worker-group"
+            groupId = "booking-worker-group",
+            containerFactory = "bookingIntentKafkaFactory"
     )
     public void consume(BookingIntentMessage message, Acknowledgment acknowledgment){
         bookingService.processBooking(message.getBookingId(), message.getEventId(), message.getUserId(), message.getSeatIds());
